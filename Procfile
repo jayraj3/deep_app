@@ -1,1 +1,1 @@
-web: guincorn django_project.wsgi
+web: guincorn jneuron.wsgi
