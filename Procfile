@@ -1,1 +1,1 @@
-web: guincorn jneuron.wsgi
+web: guincorn deep_app.wsgi
