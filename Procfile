@@ -1,1 +1,1 @@
-web: guincorn deep_app.wsgi
+web: gunicorn deep_app.wsgi
