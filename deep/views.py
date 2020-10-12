@@ -14,9 +14,9 @@ def index(request):
 
 class OImageList(View):
     def get(self,request):
-        im = OImage.objects.all().last()
+        im = OImage.objects.filter()
         ctx = {'images': im}
-        return render(request, 'deep/OImage_list.html', ctx)
+        return render(request, 'deep/oimage_list.html', ctx)
 
 
 class OImageCreate(CreateView):
