@@ -20,3 +20,4 @@ urlpatterns = [
     path('', include('deep.urls')),
     path('admin/', admin.site.urls),
 ]
+

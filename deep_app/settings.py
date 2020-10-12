@@ -25,7 +25,7 @@ SECRET_KEY = '*6m_2_3e%f1o623$@)1*mogzi9u4)tk4u7&z%)0ba80f_m)$x0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['jneuron.herokuapp.com/','*']
+ALLOWED_HOSTS = ['jneuron.herokuapp.com/','127.0.0.1']
 
 
 # Application definition
@@ -121,3 +121,7 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
+MEDIA_URL = '/media/'
+
