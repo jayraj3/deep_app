@@ -32,7 +32,7 @@ def normPRED(d):
 
     return dn
 
-def save_output(image_name,pred,d_dir, image_dir,im, d_dir_s):
+def save_output(image_name,pred,d_dir, image_dir,im, d_dir_s,d1,d2,d3,d4,d5,d6,d7):
     im_object = im
     predict = pred
     predict = predict.squeeze()
@@ -83,6 +83,7 @@ def save_output(image_name,pred,d_dir, image_dir,im, d_dir_s):
     new_name = im_object.Img.name
     initial_path = im_object.Img.path
     background.save(d_dir_s+ new_name)
+    del d1,d2,d3,d4,d5,d6,d7
     #im_object.Img.name = 'images/removed_background.png'
     #neW_path = d_dir_s + im_object.Img.name
     #os.rename(initial_path, neW_path)
@@ -155,9 +156,12 @@ def main(im):
         # save results to test_results folder
         if not os.path.exists(prediction_dir):
             os.makedirs(prediction_dir, exist_ok=True)
-        save_output(img_name_list[i_test],pred,prediction_dir, image_dir, im, p_s)
+        save_output(img_name_list[i_test],pred,prediction_dir, image_dir, im, p_s, d1,d2,d3,d4,d5,d6,d7)
 
-        del d1,d2,d3,d4,d5,d6,d7
+        
+
+
+
 
 if __name__ == "__main__":
     main()
