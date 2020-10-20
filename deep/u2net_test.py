@@ -4,21 +4,22 @@ import torch
 import torchvision
 from torch.autograd import Variable
 import torch.nn as nn
-import torch.nn.functional as F
-from torch.utils.data import Dataset, DataLoader
+# import torch.nn.functional as F
+from torch.utils.data import DataLoader
 from torchvision import transforms#, utils
 # import torch.optim as optim
 
 import numpy as np
 from PIL import Image
 import glob
+#import torch.autograd.profiler as profiler
 
 from .data_loader import RescaleT
 from .data_loader import ToTensor
 from .data_loader import ToTensorLab
 from .data_loader import SalObjDataset
 
-from .model import U2NET # full size version 173.6 MB
+#from .model import U2NET # full size version 173.6 MB
 from .model import U2NETP # small version u2net 4.7 MB
 
 from django.conf import settings #for Django image path
@@ -145,9 +146,12 @@ def main(im):
         if torch.cuda.is_available():
             inputs_test = Variable(inputs_test.cuda())
         else:
-            inputs_test = Variable(inputs_test)
+            inputs_test = Variable(inputs_test, volatile=True)
 
-        d1,d2,d3,d4,d5,d6,d7= net(inputs_test)
+        with torch.no_grad():
+                d1,d2,d3,d4,d5,d6,d7= net(inputs_test)
+
+
 
         # normalization
         pred = d1[:,0,:,:]
