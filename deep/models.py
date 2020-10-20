@@ -1,6 +1,7 @@
 from django.db import models
 from string import Template
 from django.utils.safestring import mark_safe
+from django_resized import ResizedImageField
 # Create your models here.
 # models.py 
 
@@ -11,4 +12,4 @@ from django.utils.safestring import mark_safe
 
 class OImage(models.Model): 
 	#name = models.CharField(max_length=50) 
-	Img = models.ImageField(upload_to='images/') 
+	Img =  ResizedImageField(size=[1024, 768], upload_to='images/', blank=True, null=True, quality=50)#models.ImageField(upload_to='images/')
