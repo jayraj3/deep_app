@@ -12,6 +12,7 @@ from torchvision import transforms#, utils
 import numpy as np
 from PIL import Image
 import glob
+import cv2
 #import torch.autograd.profiler as profiler
 
 from .data_loader import RescaleT
@@ -47,23 +48,24 @@ def save_output(image_name,pred,d_dir, image_dir,im, d_dir_s,d1,d2,d3,d4,d5,d6,d
     pb_np = np.array(imo)
     RESCALE = 255
     out_img = pb_np/RESCALE
+    alpha = out_img.astype(float)
     THRESHOLD = 0.7
     shape = out_img.shape
-    a_layer_init = np.ones(shape = (shape[0],shape[1],1))
-    mul_layer = np.expand_dims(out_img[:,:,0],axis=2)
-    a_layer = mul_layer*a_layer_init
-    rgba_out = np.append(out_img,a_layer,axis=2)
+    # a_layer_init = np.ones(shape = (shape[0],shape[1],1))
+    # mul_layer = np.expand_dims(out_img[:,:,0],axis=2)
+    # a_layer = mul_layer*a_layer_init
+    # rgba_out = np.append(out_img,a_layer,axis=2)
 
  
     # refine the output
-    out_img[out_img > THRESHOLD] = 1
-    out_img[out_img <= THRESHOLD] = 0
+    alpha[alpha > THRESHOLD] = 1
+    alpha[alpha <= THRESHOLD] = 0
 
-    shape = out_img.shape
-    a_layer_init = np.ones(shape = (shape[0],shape[1],1))
-    mul_layer = np.expand_dims(out_img[:,:,0],axis=2)
-    a_layer = mul_layer*a_layer_init
-    rgba_out = np.append(out_img,a_layer,axis=2)
+    # shape = out_img.shape
+    # a_layer_init = np.ones(shape = (shape[0],shape[1],1))
+    # mul_layer = np.expand_dims(out_img[:,:,0],axis=2)
+    # a_layer = mul_layer*a_layer_init
+    # rgba_out = np.append(out_img,a_layer,axis=2)
 
     #####################################################
     # Original Image
@@ -71,33 +73,26 @@ def save_output(image_name,pred,d_dir, image_dir,im, d_dir_s,d1,d2,d3,d4,d5,d6,d
     image_dir = image_dir#os.path.join(os.getcwd(), 'images')
     #names = [name[:-4] for name in os.listdir(image_dir)]
     #name = names[0]
-    in_img = Image.open(image_dir)#+'/'+name+'.jpg')
-    inp_img = np.array(in_img)
-    inp_img =inp_img/ RESCALE
-    a_layer = np.ones(shape = (shape[0],shape[1],1))
-    rgba_inp = np.append(inp_img,a_layer,axis=2)
-    rem_back = (rgba_inp*rgba_out)
-    rem_back_scaled = Image.fromarray((rem_back*RESCALE).astype('uint8'), 'RGBA')
-    background = Image.new("RGB", rem_back_scaled.size, (255, 255, 255))
-    background.paste(rem_back_scaled, mask=rem_back_scaled.split()[3]) # 3 is the alpha channel
+    foreground = cv2.imread(image_dir)#+'/'+name+'.jpg')
+    foreground = foreground.astype(float)
+    mask_out=cv2.subtract(alpha,foreground)
+    mask_out=cv2.subtract(alpha,mask_out)
+    mask_out[alpha == 0] = 255
+    # inp_img = np.array(in_img)
+    # inp_img =inp_img/ RESCALE
+    # a_layer = np.ones(shape = (shape[0],shape[1],1))
+    # rgba_inp = np.append(inp_img,a_layer,axis=2)
+    # rem_back = (rgba_inp*rgba_out)
+    # rem_back_scaled = Image.fromarray((mask_out).astype('uint8'), 'RGBA')
+    # background = Image.new("RGB", rem_back_scaled.size, (255, 255, 255))
+    # background.paste(rem_back_scaled, mask=rem_back_scaled.split()[3]) # 3 is the alpha channel
     #return rem_back_scaled
     new_name = im_object.Img.name
     initial_path = im_object.Img.path
-    background.save(d_dir_s+ new_name)
+    # background.save(d_dir_s+ new_name)
+    cv2.imwrite(d_dir_s+ new_name, mask_out)
     del d1,d2,d3,d4,d5,d6,d7
-    #im_object.Img.name = 'images/removed_background.png'
-    #neW_path = d_dir_s + im_object.Img.name
-    #os.rename(initial_path, neW_path)
-    #print("doooooooooooone")
 
-
-    # aaa = img_name.split(".")
-    # bbb = aaa[0:-1]
-    # imidx = bbb[0]
-    # for i in range(1,len(bbb)):
-    #     imidx = imidx + "." + bbb[i]
-
-    # imo.save(d_dir+imidx+'.png')
 
 def main(im):
 
