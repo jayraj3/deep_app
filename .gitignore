@@ -2,7 +2,8 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+deep/__pycache__/
+deep_app/__pycache__/
 # C extensions
 *.so
 media/images

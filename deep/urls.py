@@ -6,8 +6,8 @@ from django.conf.urls.static import static
 from . import views
 app_name = 'deep'
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('image/create/', views.OImageCreate.as_view(), name='image_upload'),
+    path('index', views.index, name='index'),
+    path('', views.OImageCreate.as_view(), name='image_upload'),
     path('image/', views.OImageList.as_view(), name='image_view')
 ]
 
