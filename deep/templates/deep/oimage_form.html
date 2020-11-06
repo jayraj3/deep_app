@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-0XV3HNB1MT"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -11,8 +11,6 @@
   gtag('config', 'G-0XV3HNB1MT');
 </script>
 <title>{% block title %}{{ settings.APP_NAME }}{% endblock %}</title>
-
-
 <style>
     #cover {
     background: #222 url('https://i.picsum.photos/id/786/1920/1080.jpg?hmac=sox2iQIR1tENA_e4K5aJulFPstecrOsvLvIn6JiXHkg') center center no-repeat;
@@ -57,17 +55,14 @@ form:before {
             <div class="container">
                 <div class="row text-white">
                     <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto text-center form p-4">
-                        <h1 class="display-4 py-2 ">Remove Background from Image</h1>
+                        <h1 class="display-4 py-2 ">Modify Background of Image</h1>
                         <div class="px-2">
                             <form method = "post" enctype="multipart/form-data" class="justify-content-center"> 
-                            
                                 {% csrf_token %} 
                                 <div class="form-group ">
                                     {{ form.as_p }} 
-                                    
                                 </div>
-                               
-                                <button type="submit" class="btn btn-primary btn-lg">Remove Background</button> 
+                                <button type="submit" class="btn btn-primary btn-lg">Click</button> 
                             </div>
                             </form> 
                         </div>
@@ -76,6 +71,4 @@ form:before {
             </div>
         </div>
     </section>
-
-
     </html>

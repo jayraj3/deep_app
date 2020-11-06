@@ -81,7 +81,6 @@ def save_output(image_name,pred,d_dir, image_dir,im, d_dir_s,d1,d2,d3,d4,d5,d6,d
         mask_out=cv2.subtract(alpha,foreground)
         mask_out=cv2.subtract(alpha,mask_out)
         mask_out[alpha == 0] = 255
-        print(f"remove")
     elif action=='2':
         blurredImage = cv2.GaussianBlur(foreground, (7,7), 0)
         blurredImage = cv2.GaussianBlur(foreground, (7,7), 0)
@@ -91,7 +90,6 @@ def save_output(image_name,pred,d_dir, image_dir,im, d_dir_s,d1,d2,d3,d4,d5,d6,d
         foreground = cv2.multiply(alpha, foreground)
         background = cv2.multiply(1.0 - alpha, blurredImage)
         mask_out = cv2.add(foreground, background)
-        print(f"blur back")
     else:
         background = cv2.cvtColor(foreground, cv2.COLOR_BGR2GRAY)
         background = cv2.cvtColor(background, cv2.COLOR_GRAY2RGB)
@@ -101,7 +99,6 @@ def save_output(image_name,pred,d_dir, image_dir,im, d_dir_s,d1,d2,d3,d4,d5,d6,d
         foreground = cv2.multiply(alpha, foreground)
         background = cv2.multiply(1.0 - alpha, background)
         mask_out = cv2.add(foreground, background)
-        print(f"black and white back")
     new_name = im_object.Img.name
     initial_path = im_object.Img.path
     # background.save(d_dir_s+ new_name)
