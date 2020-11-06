@@ -30,6 +30,7 @@ tifffile
 whitenoise==5.2.0
 wincertstore==0.2
 opencv-python-headless
+django-storages
 --find-links https://download.pytorch.org/whl/torch_stable.html
 torch==1.6.0+cpu
 torchvision==0.7.0+cpu

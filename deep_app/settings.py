@@ -26,7 +26,7 @@ DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {'PNG': ".png"}
 SECRET_KEY = '*6m_2_3e%f1o623$@)1*mogzi9u4)tk4u7&z%)0ba80f_m)$x0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = (os.environ.get('DEBUG')=='True')
 
 ALLOWED_HOSTS = ['jneuron.herokuapp.com/','127.0.0.1']
 
@@ -130,3 +130,12 @@ MEDIA_URL = '/media/'
 
 # for postgres
 django_heroku.settings(locals())
+
+# AWS S3 access
+# AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+# AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+# AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+
+# AWS_S3_FILE_OVERWRITE = False
+# AWS_DEFAULT_ACL = None
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

@@ -74,19 +74,34 @@ def save_output(image_name,pred,d_dir, image_dir,im, d_dir_s,d1,d2,d3,d4,d5,d6,d
     #names = [name[:-4] for name in os.listdir(image_dir)]
     #name = names[0]
     foreground = cv2.imread(image_dir)#+'/'+name+'.jpg')
-    foreground = foreground.astype(float)
-    mask_out=cv2.subtract(alpha,foreground)
-    mask_out=cv2.subtract(alpha,mask_out)
-    mask_out[alpha == 0] = 255
-    # inp_img = np.array(in_img)
-    # inp_img =inp_img/ RESCALE
-    # a_layer = np.ones(shape = (shape[0],shape[1],1))
-    # rgba_inp = np.append(inp_img,a_layer,axis=2)
-    # rem_back = (rgba_inp*rgba_out)
-    # rem_back_scaled = Image.fromarray((mask_out).astype('uint8'), 'RGBA')
-    # background = Image.new("RGB", rem_back_scaled.size, (255, 255, 255))
-    # background.paste(rem_back_scaled, mask=rem_back_scaled.split()[3]) # 3 is the alpha channel
-    #return rem_back_scaled
+    action= str(im_object.action)
+    print(f"choise : {action}")
+    if action=='1':
+        foreground = foreground.astype(float)
+        mask_out=cv2.subtract(alpha,foreground)
+        mask_out=cv2.subtract(alpha,mask_out)
+        mask_out[alpha == 0] = 255
+        print(f"remove")
+    elif action=='2':
+        blurredImage = cv2.GaussianBlur(foreground, (7,7), 0)
+        blurredImage = cv2.GaussianBlur(foreground, (7,7), 0)
+        blurredImage = blurredImage.astype(float)
+        foreground = foreground.astype(float)
+        alpha = cv2.GaussianBlur(alpha, (7,7),0)
+        foreground = cv2.multiply(alpha, foreground)
+        background = cv2.multiply(1.0 - alpha, blurredImage)
+        mask_out = cv2.add(foreground, background)
+        print(f"blur back")
+    else:
+        background = cv2.cvtColor(foreground, cv2.COLOR_BGR2GRAY)
+        background = cv2.cvtColor(background, cv2.COLOR_GRAY2RGB)
+        foreground = foreground.astype(float)
+        background = background.astype(float)
+        alpha = cv2.GaussianBlur(alpha, (7,7),0)
+        foreground = cv2.multiply(alpha, foreground)
+        background = cv2.multiply(1.0 - alpha, background)
+        mask_out = cv2.add(foreground, background)
+        print(f"black and white back")
     new_name = im_object.Img.name
     initial_path = im_object.Img.path
     # background.save(d_dir_s+ new_name)
@@ -99,7 +114,6 @@ def main(im):
     # --------- 1. get image path and name ---------
     model_name='u2netp'# fixed as u2netp
     image_dir = im.Img.path
-
     #print("running main")
     #print(os.getcwd())
     #image_dir = os.path.join(os.getcwd(), 'images') # changed to 'images' directory which is populated while running the script
