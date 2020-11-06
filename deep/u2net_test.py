@@ -99,8 +99,8 @@ def save_output(image_name,pred,d_dir, image_dir,im, d_dir_s,d1,d2,d3,d4,d5,d6,d
         foreground = cv2.multiply(alpha, foreground)
         background = cv2.multiply(1.0 - alpha, background)
         mask_out = cv2.add(foreground, background)
-    new_name = im_object.Img.name
-    initial_path = im_object.Img.path
+    new_name = im_object.Image.name
+    initial_path = im_object.Image.path
     # background.save(d_dir_s+ new_name)
     cv2.imwrite(d_dir_s+ new_name, mask_out)
     del d1,d2,d3,d4,d5,d6,d7
@@ -110,7 +110,7 @@ def main(im):
 
     # --------- 1. get image path and name ---------
     model_name='u2netp'# fixed as u2netp
-    image_dir = im.Img.path
+    image_dir = im.Image.path
     #print("running main")
     #print(os.getcwd())
     #image_dir = os.path.join(os.getcwd(), 'images') # changed to 'images' directory which is populated while running the script
