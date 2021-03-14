@@ -1,10 +1,10 @@
 import os
 from skimage import io, transform
 import torch
-import torchvision
+#import torchvision
 from torch.autograd import Variable
-import torch.nn as nn
-from torch.utils.data import DataLoader
+#import torch.nn as nn
+#from torch.utils.data import DataLoader
 from torchvision import transforms
 
 import numpy as np
@@ -12,10 +12,10 @@ from PIL import Image
 import glob
 import cv2
 
-from .data_loader import RescaleT
-from .data_loader import ToTensor
-from .data_loader import ToTensorLab
-from .data_loader import SalObjDataset
+# from .data_loader import RescaleT
+# from .data_loader import ToTensor
+# from .data_loader import ToTensorLab
+# from .data_loader import SalObjDataset
 
 from .model import U2NETP # small version u2net 4.7 MB
 
