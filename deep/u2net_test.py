@@ -4,26 +4,22 @@ import torch
 import torchvision
 from torch.autograd import Variable
 import torch.nn as nn
-# import torch.nn.functional as F
 from torch.utils.data import DataLoader
-from torchvision import transforms#, utils
-# import torch.optim as optim
+from torchvision import transforms
 
 import numpy as np
 from PIL import Image
 import glob
 import cv2
-#import torch.autograd.profiler as profiler
 
 from .data_loader import RescaleT
 from .data_loader import ToTensor
 from .data_loader import ToTensorLab
 from .data_loader import SalObjDataset
 
-#from .model import U2NET # full size version 173.6 MB
 from .model import U2NETP # small version u2net 4.7 MB
 
-from django.conf import settings #for Django image path
+from django.conf import settings # Django image path
 
 # normalize the predicted SOD probability map
 def normPRED(d):
@@ -51,37 +47,27 @@ def save_output(image_name,pred,d_dir, image_dir,im, d_dir_s,d1,d2,d3,d4,d5,d6,d
     alpha = out_img.astype(float)
     THRESHOLD = 0.7
     shape = out_img.shape
-    # a_layer_init = np.ones(shape = (shape[0],shape[1],1))
-    # mul_layer = np.expand_dims(out_img[:,:,0],axis=2)
-    # a_layer = mul_layer*a_layer_init
-    # rgba_out = np.append(out_img,a_layer,axis=2)
 
  
     # refine the output
     alpha[alpha > THRESHOLD] = 1
     alpha[alpha <= THRESHOLD] = 0
 
-    # shape = out_img.shape
-    # a_layer_init = np.ones(shape = (shape[0],shape[1],1))
-    # mul_layer = np.expand_dims(out_img[:,:,0],axis=2)
-    # a_layer = mul_layer*a_layer_init
-    # rgba_out = np.append(out_img,a_layer,axis=2)
 
     #####################################################
     # Original Image
     #####################################################
-    image_dir = image_dir#os.path.join(os.getcwd(), 'images')
-    #names = [name[:-4] for name in os.listdir(image_dir)]
-    #name = names[0]
-    foreground = cv2.imread(image_dir)#+'/'+name+'.jpg')
+    image_dir = image_dir
+    foreground = cv2.imread(image_dir)
     action= str(im_object.action)
-    print(f"choise : {action}")
     if action=='1':
+        # Remove background
         foreground = foreground.astype(float)
         mask_out=cv2.subtract(alpha,foreground)
         mask_out=cv2.subtract(alpha,mask_out)
         mask_out[alpha == 0] = 255
     elif action=='2':
+        # Blur background
         blurredImage = cv2.GaussianBlur(foreground, (7,7), 0)
         blurredImage = cv2.GaussianBlur(foreground, (7,7), 0)
         blurredImage = blurredImage.astype(float)
@@ -91,6 +77,7 @@ def save_output(image_name,pred,d_dir, image_dir,im, d_dir_s,d1,d2,d3,d4,d5,d6,d
         background = cv2.multiply(1.0 - alpha, blurredImage)
         mask_out = cv2.add(foreground, background)
     else:
+        # Black and white background
         background = cv2.cvtColor(foreground, cv2.COLOR_BGR2GRAY)
         background = cv2.cvtColor(background, cv2.COLOR_GRAY2RGB)
         foreground = foreground.astype(float)
@@ -101,7 +88,6 @@ def save_output(image_name,pred,d_dir, image_dir,im, d_dir_s,d1,d2,d3,d4,d5,d6,d
         mask_out = cv2.add(foreground, background)
     new_name = im_object.Image.name
     initial_path = im_object.Image.path
-    # background.save(d_dir_s+ new_name)
     cv2.imwrite(d_dir_s+ new_name, mask_out)
     del d1,d2,d3,d4,d5,d6,d7
 
@@ -109,18 +95,13 @@ def save_output(image_name,pred,d_dir, image_dir,im, d_dir_s,d1,d2,d3,d4,d5,d6,d
 def main(im):
 
     # --------- 1. get image path and name ---------
-    model_name='u2netp'# fixed as u2netp
+    model_name='u2netp'
     image_dir = im.Image.path
-    #print("running main")
-    #print(os.getcwd())
-    #image_dir = os.path.join(os.getcwd(), 'images') # changed to 'images' directory which is populated while running the script
-    prediction_dir = settings.MEDIA_ROOT+ '/images/' #E:/deep_app/media/images/' #settings.MEDIA_ROOT+ '/images' # changed to 'results' directory which is populated after the predictions
-    #print(f"prediction directory : "  +prediction_dir)
-    model_dir = os.path.join(os.getcwd()+'/deep/', model_name + '.pth') # path to u2netp pretrained weights
+    prediction_dir = settings.MEDIA_ROOT+ '/images/'
+    model_dir = os.path.join(os.getcwd()+'/deep/', model_name + '.pth') 
 
-    img_name_list = [image_dir]#glob.glob('E:/deep_app/media/images/' + os.sep + '*')
-    #print(img_name_list)
-    p_s = settings.MEDIA_ROOT + '/'#'E:/deep_app/media/'
+    img_name_list = [image_dir]
+    p_s = settings.MEDIA_ROOT + '/'
 
     # --------- 2. dataloader ---------
     #1. dataloader
@@ -144,7 +125,6 @@ def main(im):
     # --------- 4. inference for each image ---------
     for i_test, data_test in enumerate(test_salobj_dataloader):
 
-        #print("inferencing:",img_name_list[i_test].split(os.sep)[-1])
         image_name = img_name_list[i_test].split(os.sep)[-1]
         inputs_test = data_test['image']
         inputs_test = inputs_test.type(torch.FloatTensor)
