@@ -5,8 +5,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from .u2net_test import main
 #from pympler.tracker import SummaryTracker
-
-
+from deep.forms import OImageForm
 from deep.models import OImage
 
 def index(request):
@@ -14,6 +13,7 @@ def index(request):
 
 
 class OImageList(View):
+    form_class = OImageForm
     def get(self,request):
 
         im = OImage.objects.last()
@@ -25,7 +25,8 @@ class OImageList(View):
 
 class OImageCreate(CreateView):
     model = OImage
-    fields = '__all__'
+    form_class = OImageForm
+    # fields = '__all__'
     success_url = reverse_lazy('deep:image_view')
 
 

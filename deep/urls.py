@@ -11,6 +11,6 @@ urlpatterns = [
     path('image/', views.OImageList.as_view(), name='image_view')
 ]
 
-if settings.DEBUG:
-        urlpatterns += static(settings.MEDIA_URL,
+
+urlpatterns += static(settings.MEDIA_URL,
                               document_root=settings.MEDIA_ROOT)

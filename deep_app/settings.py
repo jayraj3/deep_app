@@ -43,7 +43,11 @@ INSTALLED_APPS = [
     'deep.apps.DeepConfig',
     'rest_framework',
     'api.apps.ApiConfig',
+    'crispy_forms',
 ]
+
+# Set crispy template_pack
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
