@@ -128,11 +128,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
+
+MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
+if DEBUG:
+  STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] # serve static file while Debug =False
+else:
+  STATIC_ROOT = os.path.join(BASE_DIR, 'static')  
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
-MEDIA_URL = '/media/'
 
 # for postgres
 django_heroku.settings(locals())
